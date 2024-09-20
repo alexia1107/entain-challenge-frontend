@@ -1,0 +1,29 @@
+.welcome-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15vh;
+  background: linear-gradient(120deg, #1c354b, #101010);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-header h1 {
+  font-size: 2rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
