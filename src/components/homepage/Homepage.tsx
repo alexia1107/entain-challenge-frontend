@@ -3,9 +3,6 @@ import MovieList from "../list-movies/list-movies";
 import "./Homepage.css";
 import Header from "../header/Header";
 
-
-
-
 const Homepage: React.FC = () => {
   return (
     <div className="main-container">

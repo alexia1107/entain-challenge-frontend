@@ -1,46 +1,73 @@
-# Getting Started with Create React App
+## Movie Library Application
+This project was bootstrapped with Create React App.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+This Movie Library Application allows users to browse movies, search by title, and filter by genres. It is built using React, Redux Toolkit (RTK Query), and Material UI. The app fetches movie and genre data from a backend API.
 
-## Available Scripts
-
+## Features
+Search for movies by title
+Filter movies by genre
+View movie details including posters and descriptions
+Responsive design using Material UI
+Backend API integration for fetching movie and genre data
+Available Scripts
 In the project directory, you can run:
 
-### `npm start`
+npm start
+Runs the app in development mode.
+Open http://localhost:3000 to view it in the browser.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
+The page will reload if you make edits.
 You will also see any lint errors in the console.
 
-### `npm test`
+npm test
+Launches the test runner in the interactive watch mode.
+See the section about running tests for more information.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
+npm run build
+Builds the app for production to the build folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+npm run eject
+Note: this is a one-way operation. Once you eject, you can’t go back!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Project Structure
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+├── public
+├── src
+│   ├── components
+│   │   └── MovieList.tsx          # Main movie listing component
+│   ├── store
+│   │   ├── movieSlice.ts          # Redux slice using RTK Query for fetching movies and genres
+│   │   └── store.ts               # Configures the Redux store
+│   ├── interfaces
+│   │   └── movie-model.ts         # Movie and genre type definitions
+│   ├── App.tsx                    # Main application component
+│   ├── index.tsx                  # Entry point, setting up Redux store provider
+│   └── styles
+│       └── list-movies.css        # Custom styles for the movie list component
+├── package.json
+└── README.md
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## API Endpoints
+The frontend interacts with a backend API to fetch movies and genres.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Endpoints:
+GET /api/movies/popular: Fetches popular movies.
+GET /api/movies/genre?genreId={genreId}: Fetches movies based on genre.
+GET /api/movies/search?query={searchQuery}: Fetches movies based on a search query.
+GET /api/genres: Fetches available genres.
+Ensure that your backend API is running on http://localhost:3001.
 
-## Learn More
+## State Management
+State management is handled using Redux Toolkit and RTK Query for API calls and caching. This ensures efficient data fetching and caching for movies and genres, minimizing unnecessary re-fetching.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Troubleshooting
+Backend not working: Ensure that the backend API is running at http://localhost:3001.
+CORS errors: If fetching from an external API, make sure the API allows CORS for your frontend.
+Learn More
+You can learn more in the Create React App documentation.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To learn more about React, check out the React documentation.

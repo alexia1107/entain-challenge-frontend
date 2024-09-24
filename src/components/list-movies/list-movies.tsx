@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import {
   TextField,
   Select,
@@ -8,66 +7,35 @@ import {
   FormControl,
   Button,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import '../list-movies/list-movies.css'
-
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  overview: string;
-}
-
-interface Genre {
-  id: number;
-  name: string;
-}
+import "../list-movies/list-movies.css";
+import { useGetGenresQuery, useGetMoviesQuery } from "../../store/movieSlice";
 
 const MovieList: React.FC = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [genres, setGenres] = useState<Genre[]>([]);
-  const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedGenre, setSelectedGenre] = useState<number | undefined>();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/api/genres")
-      .then((response) => setGenres(response.data.genres))
-      .catch((error) => console.error("Error fetching genres:", error));
-  }, []);
+  // Fetch genres using RTK Query
+  const {
+    data: genres = [],
+    isLoading: genresLoading,
+    error: genresError,
+  } = useGetGenresQuery();
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        let response;
-        if (searchQuery) {
-          response = await axios.get(
-            "http://localhost:3001/api/movies/search",
-            { params: { query: searchQuery } }
-          );
-        } else if (selectedGenre) {
-          response = await axios.get("http://localhost:3001/api/movies/genre", {
-            params: { genreId: selectedGenre },
-          });
-        } else {
-          response = await axios.get(
-            "http://localhost:3001/api/movies/popular"
-          );
-        }
-        setMovies(response.data.results || []);
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-      }
-    };
-
-    fetchMovies();
-  }, [searchQuery, selectedGenre]);
+  // Fetch movies based on selected genre or search query
+  const {
+    data: movies = [],
+    isLoading: moviesLoading,
+    error: moviesError,
+  } = useGetMoviesQuery({
+    searchQuery: searchTerm,
+    genreId: selectedGenre,
+  });
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSearchQuery(searchTerm);
   };
 
   return (
@@ -79,7 +47,11 @@ const MovieList: React.FC = () => {
             labelId="genre-select-label"
             id="genre-select"
             value={selectedGenre || ""}
-            onChange={(e) => setSelectedGenre(Number(e.target.value))}
+            onChange={(e) =>
+              setSelectedGenre(
+                e.target.value ? Number(e.target.value) : undefined
+              )
+            }
             label="Filter by Genre"
           >
             <MenuItem value="">
@@ -114,7 +86,11 @@ const MovieList: React.FC = () => {
       </div>
 
       <div className="movie-list">
-        {movies.length > 0 ? (
+        {genresLoading || moviesLoading ? (
+          <CircularProgress />
+        ) : genresError || moviesError ? (
+          <p>Failed to fetch data</p>
+        ) : movies.length > 0 ? (
           movies.map((movie) => (
             <div key={movie.id} className="movie-item">
               <img
