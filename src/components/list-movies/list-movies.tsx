@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import {
   TextField,
   Select,
@@ -12,6 +12,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import "../list-movies/list-movies.css";
 import { useGetGenresQuery, useGetMoviesQuery } from "../../store/movieSlice";
+
+// Lazy load movie items
+const MovieItem = React.lazy(() => import("./MovieItem"));
 
 const MovieList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -91,16 +94,11 @@ const MovieList: React.FC = () => {
         ) : genresError || moviesError ? (
           <p>Failed to fetch data</p>
         ) : movies.length > 0 ? (
-          movies.map((movie) => (
-            <div key={movie.id} className="movie-item">
-              <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-              />
-              <h3>{movie.title}</h3>
-              <p>{movie.overview}</p>
-            </div>
-          ))
+          <Suspense fallback={<CircularProgress />}>
+            {movies.map((movie) => (
+              <MovieItem key={movie.id} movie={movie} />
+            ))}
+          </Suspense>
         ) : (
           <p>No movies found</p>
         )}
